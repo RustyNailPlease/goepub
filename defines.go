@@ -45,6 +45,8 @@ type OpenPackageFormat struct {
 	Spine Spine `xml:"spine"`
 
 	Manifest Manifest `xml:"manifest"`
+
+	TocNcx TocNcx
 }
 
 type DCDate struct {
@@ -108,4 +110,43 @@ type ManifestItem struct {
 *********************************************************
 **/
 type TocNcx struct {
+	Head TocHead `xml:"head"`
+
+	DocTitle TocDocTitle `xml:"docTitle"`
+
+	NavMap NavMap `xml:"navMap"`
+}
+
+type TocHead struct {
+	Metas []TocHeadMeta `xml:"meta"`
+}
+
+type TocHeadMeta struct {
+	Name    string `xml:"name,attr"`
+	Content string `xml:"content,attr"`
+}
+
+type TocDocTitle struct {
+	Text string `xml:"text"`
+}
+
+type NavMap struct {
+	NavPoints []NavPoint `xml:"navPoint"`
+}
+
+type NavPoint struct {
+	ID        string `xml:"id,attr"`
+	PlayOrder int    `xml:"playOrder,attr"`
+
+	NavLabel NavLabel `xml:"navLabel"`
+
+	Content struct {
+		Src string `xml:"src,attr"`
+	} `xml:"content"`
+
+	NavPoints []NavPoint `xml:"navPoint"`
+}
+
+type NavLabel struct {
+	Text string `xml:"text"`
 }

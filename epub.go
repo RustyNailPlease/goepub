@@ -46,6 +46,33 @@ func NewEpub(filePath string) (*Epub, error) {
 	}
 	// read opd.guide.reference.cover
 	//loadReferenceContent(epub)
+	// load toc
+
+	// find toc file path
+	path := ""
+	for _, item := range epub.OPF.Manifest.Items {
+		if item.ID == epub.OPF.Spine.Toc {
+			path = item.Href
+		}
+	}
+	if path == "" {
+		return nil, errors.New("ncxtoc not found with name " + epub.OPF.Spine.Toc)
+	}
+
+	zf, ok := epub.FilePaths["OEBPS/"+path]
+	if !ok {
+		return nil, err
+	}
+	buf, err := readTextFromZipFile(zf)
+	if err != nil {
+		return nil, err
+	}
+	var toc TocNcx
+	err = xml.Unmarshal(buf, &toc)
+	if err != nil {
+		return nil, err
+	}
+	epub.OPF.TocNcx = toc
 
 	return epub, nil
 }

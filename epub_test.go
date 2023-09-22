@@ -7,12 +7,12 @@ import (
 )
 
 func TestEpubReade(t *testing.T) {
-	epub, err := NewEpub("")
+	epub, err := NewEpub("data/诡秘之主-爱潜水的乌贼.epub")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	buf, _ := json.Marshal(epub.OPF.Manifest)
+	buf, _ := json.Marshal(epub.OPF.TocNcx)
 	log.Println(string(buf))
 }

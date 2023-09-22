@@ -1,6 +1,6 @@
 ./out
 ./logs
-./data
+data/
 ./test
 
 *.o
