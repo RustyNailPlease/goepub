@@ -1,0 +1,12 @@
+./out
+./logs
+./data
+./test
+
+*.o
+*.exe
+*.log
+
+.idea
+
+*.iml
