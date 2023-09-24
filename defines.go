@@ -40,11 +40,11 @@ type OpenPackageFormat struct {
 
 	MetaData OpenPackageFormatMetaData `xml:"metadata"`
 
+	Manifest Manifest `xml:"manifest"`
+
 	Guide Guide `xml:"guide"`
 
 	Spine Spine `xml:"spine"`
-
-	Manifest Manifest `xml:"manifest"`
 
 	TocNcx TocNcx
 }
@@ -54,6 +54,12 @@ type DCDate struct {
 	Event string `xml:"event,attr"`
 }
 
+type DCIdentifier struct {
+	ID     string `xml:"id,attr"`
+	Scheme string `xml:"scheme,attr"`
+	Text   string `xml:",chardata"`
+}
+
 type OpenPackageFormatMetaData struct {
 	Metas        []OpenPackageFormatMeta `xml:"meta"`
 	DCTitle      string                  `xml:"title"`
@@ -61,7 +67,7 @@ type OpenPackageFormatMetaData struct {
 	DCDate       []DCDate                `xml:"date"`
 	DCRights     string                  `xml:"rights"`
 	DCLanguage   string                  `xml:"language"`
-	DCIdentifier string                  `xml:"identifier"`
+	DCIdentifier []DCIdentifier          `xml:"identifier"`
 }
 
 type OpenPackageFormatMeta struct {

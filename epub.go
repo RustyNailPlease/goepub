@@ -6,11 +6,13 @@ import (
 	"errors"
 	"io"
 	"log"
+	"strings"
 )
 
 type Epub struct {
 	File      *zip.ReadCloser
 	FilePaths map[string]*zip.File
+	OEBPSPath string
 
 	Container Container
 
@@ -59,7 +61,7 @@ func NewEpub(filePath string) (*Epub, error) {
 		return nil, errors.New("ncxtoc not found with name " + epub.OPF.Spine.Toc)
 	}
 
-	zf, ok := epub.FilePaths["OEBPS/"+path]
+	zf, ok := epub.FilePaths[epub.OEBPSPath+path]
 	if !ok {
 		return nil, err
 	}
@@ -125,7 +127,9 @@ func (epub *Epub) readOPF() error {
 	if len(epub.Container.RootFiles) == 0 {
 		return errors.New("opf file not found")
 	}
-	opfPath := epub.FilePaths[epub.Container.RootFiles[0].FullPath]
+
+	filePath := epub.Container.RootFiles[0].FullPath
+	opfPath := epub.FilePaths[filePath]
 	bytes, err := readTextFromZipFile(opfPath)
 	if err != nil {
 		return err
@@ -136,6 +140,13 @@ func (epub *Epub) readOPF() error {
 		return err
 	}
 	epub.OPF = opf
+
+	if filePath != "" {
+		opfParent := strings.Join(strings.Split(filePath, "/")[:len(strings.Split(filePath, "/"))-1], "/")
+		if opfParent != "" {
+			epub.OEBPSPath = opfParent + "/"
+		}
+	}
 
 	return nil
 }
